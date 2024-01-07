@@ -1,0 +1,226 @@
+:root {
+  --main-color: var(--color);
+  --green: #33e234;
+  --blue: #549fc9;
+  --magenta: #d35ea2;
+  --color: var(--green);
+
+}
+
+@media (max-width: 500px) {
+  .container {
+    transform: scale(0.8);
+  }
+}
+
+@property --color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: var(--green);
+}
+
+body,
+html {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.main {
+  background: black;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 60px;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 900;
+  color: var(--main-color);
+  overflow: hidden;
+}
+
+.container {
+  overflow: auto;
+  opacity: 0;
+  position: relative;
+  background: rgb(50, 50, 50);
+  width: 50%;
+  min-width: 9ch;
+  min-height: 2em;
+  height: 350px;
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  font-size: 60px;
+}
+
+.container::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(transparent 5%, rgba(0, 0, 0, 0.8));
+}
+
+.overlay {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 2px,
+    black 2px,
+    black 4px
+  );
+  opacity: 0.5;
+}
+
+.centered-container {
+  top: 50%;
+  transform: translate(0, -50%);
+  height: 1.3em;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.numbers {
+  user-select: none;
+  height: 30em;
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  filter: drop-shadow(0px 0px 4px var(--main-color));
+}
+
+.numbers * {
+  margin-right: 4px;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.number-svg {
+  /* background-position-y: 0em; */
+  mask-position: 0 0em;
+  -webkit-mask-position-y: 0em;
+}
+
+.number-svg::before {
+  content: "";
+  display: block;
+  width: 1ch;
+  position: relative;
+  height: 100%;
+  
+  background-color: var(--main-color);
+  mask-image: url("../media/back.svg");
+  -webkit-mask-image: url("../media/back.svg");
+  mask-position: inherit;
+  -webkit-mask-position-y: inherit;
+  /* background-image: url("../media/back.svg");
+  background-position-y: inherit; */
+  clip-path: polygon(0 0, 1ch 0, 1ch 1.1em, 0 1.1em);
+  transition: inherit;
+}
+
+.number-svg::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  width: 1ch;
+  top: calc(1.1em - 3px);
+  background: var(--main-color);
+  opacity: 0.7;
+  transition: background-color 0.5s;
+}
+
+.bottom-container {
+  padding: 50px;
+  width: 50%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 5px;
+}
+
+.color-change-container {
+  grid-column: 2;
+  width: 100%;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 30px;
+}
+
+button.color-change {
+  --color: white;
+  & svg {
+    filter: drop-shadow(0 0 6px var(--color));
+
+    & * {
+      stroke: var(--color);
+      transition: stroke 0.5s linear;
+    }
+  }
+  &:hover,
+  &.hovered,
+  &:focus {
+    border-color: var(--color) !important;
+  }
+  &.green:hover,
+  &.green.hovered,
+  &.green:focus {
+    --color: var(--green);
+  }
+  &.blue:hover,
+  &.blue.hovered,
+  &.blue:focus {
+    --color: var(--blue);
+  }
+  &.magenta:hover,
+  &.magenta.hovered,
+  &.magenta:focus {
+    --color: var(--magenta);
+  }
+}
+
+.bottom-container button {
+  position: relative;
+  background: rgb(50, 50, 50);
+  border: 1px solid rgba(255, 255, 255, 0);
+  font-family: inherit;
+  color: white;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.5s;
+}
+
+body:not(.touched) .bottom-container button:hover,
+.bottom-container button.hovered {
+  border-color: rgba(255, 255, 255, 1);
+}
+
+.bottom-container button.rerun {
+  width: 100%;
+  height: 30px;
+  grid-column: 2;
+}
+
+button.rerun span {
+  overflow: hidden;
+  height: 14px;
+  line-height: 1;
+  font-size: 14px;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
