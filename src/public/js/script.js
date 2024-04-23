@@ -6,9 +6,7 @@ window.numbersProject = (function numbersProject() {
   let current = [];
   let rerun;
   const root = document.documentElement;
-  const fullSpin = 21;
-  const letterSize = 1.1;
-  const duration = 2500;
+  const DURATION = 2500;
   const MAX_SYMBOLS = 7;
 
   window.onload = () => {
@@ -16,7 +14,6 @@ window.numbersProject = (function numbersProject() {
     SVGnumbers = document.querySelectorAll(".number-svg");
     rerun = document.querySelector("span#rerun");
     setTimeout(() => {
-      console.log("loaded");
       showContainer();
     }, 0);
     touchHoverControl();
@@ -64,7 +61,6 @@ window.numbersProject = (function numbersProject() {
     while (current.length < MAX_SYMBOLS) {
       current.push("0");
     }
-    console.log(current);
     let itr = 0;
     for (const number of SVGnumbers) {
       //  console.log(
@@ -96,7 +92,7 @@ window.numbersProject = (function numbersProject() {
           { value: `${prev[itr] ? Number(prev[itr]) : 0}em`, duration: 0 },
           {
             value: `-${Number(current[itr]) + 10 * (speed + itr)}em`,
-            duration: duration + 150 * itr,
+            duration: DURATION + 150 * itr,
           },
         ],
         maskPosition: [
@@ -106,7 +102,7 @@ window.numbersProject = (function numbersProject() {
           },
           {
             value: `0 -${Number(current[itr]) + 10 * (speed + itr)}em`,
-            duration: duration + 150 * itr,
+            duration: DURATION + 150 * itr,
           },
         ],
         easing: "cubicBezier(0, 0.55, 0.45, 1)",
@@ -151,8 +147,7 @@ window.numbersProject = (function numbersProject() {
     let moveDelayTimer;
     let overDelayTimer;
     let untouchListener;
-    let overCounter = 0;
-    let selectors = "button.color-change, .bottom-container button";
+    let SELECTORS = "button.color-change, .bottom-container button";
     const init = (function () {
       console.log("init");
       document.addEventListener("touchstart", (e) => initHover(e));
@@ -160,7 +155,7 @@ window.numbersProject = (function numbersProject() {
         clearTimeout(moveDelayTimer);
         moveDelayTimer = setTimeout(initHover, 15, e);
       });
-      document.addEventListener("touchend", cancelHover);
+      document.addEventListener("touchend", (e) => cancelHover(e));
       document.addEventListener("touchcancel", cancelHover);
     })();
 
@@ -169,7 +164,6 @@ window.numbersProject = (function numbersProject() {
         untouchListener = document.addEventListener("mouseover", untouch);
       }
       document.body.classList.add("touched");
-      overCounter = 0;
       if (e.touches.length > 1) {
         cancelHover();
         return;
@@ -178,7 +172,7 @@ window.numbersProject = (function numbersProject() {
       let touch = e.touches[0];
       let hovered = document
         .elementFromPoint(touch.clientX, touch.clientY)
-        .closest(selectors);
+        .closest(SELECTORS);
       if (!hovered) {
         cancelHover();
         return;
@@ -192,16 +186,20 @@ window.numbersProject = (function numbersProject() {
       hoveredElement.classList.add("hovered");
     }
 
-    function cancelHover() {
+    function cancelHover(e) {
       if (!hoveredElement) return;
+      if (e) {
+        if (e.touches.length !== 0) {
+          return;
+        }
+        // if we want to keep last hovered element hovered we should return here
+        return;
+      }
       hoveredElement.classList.remove("hovered");
       hoveredElement = null;
     }
 
     function untouch() {
-      if (++overCounter < 2) {
-        return;
-      }
       console.log("untouch");
       clearTimeout(overDelayTimer);
       overDelayTimer = setTimeout(() => {
@@ -209,6 +207,7 @@ window.numbersProject = (function numbersProject() {
           document.body.classList.remove("touched");
       }, 50);
       document.removeEventListener("mouseover", untouch);
+      cancelHover();
     }
   };
 
