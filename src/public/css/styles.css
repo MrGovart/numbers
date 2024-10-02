@@ -24,6 +24,8 @@ html {
   margin: 0;
   width: 100%;
   height: 100%;
+  min-height: 500px;
+  overflow: hidden;
 }
 
 .main {
@@ -158,6 +160,8 @@ html {
 
 button.color-change {
   --color: white;
+
+
   & svg {
     filter: drop-shadow(0 0 6px var(--color));
 
@@ -166,26 +170,29 @@ button.color-change {
       transition: stroke 0.5s linear;
     }
   }
-  &:hover,
+
+  &:hover:not(body.touched *),
   &.hovered,
   &:focus {
     border-color: var(--color) !important;
   }
-  &.green:hover,
+  &.green:hover:not(body.touched *),
   &.green.hovered,
   &.green:focus {
     --color: var(--green);
   }
-  &.blue:hover,
+  &.blue:hover:not(body.touched *),
   &.blue.hovered,
   &.blue:focus {
     --color: var(--blue);
   }
-  &.magenta:hover,
+  &.magenta:hover:not(body.touched *),
   &.magenta.hovered,
   &.magenta:focus {
     --color: var(--magenta);
   }
+  
+
 }
 
 .bottom-container button {

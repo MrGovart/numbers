@@ -142,6 +142,20 @@ window.numbersProject = (function numbersProject() {
   }
 
   // touchscreen hover
+  // custom hover implementation for mobile devices
+  // uses .touched class (apllied on touch event) on body to define a device (not the device but actual type of using it (by mouse or touches) which is more precise)
+  // to apply hover add used selectors to SELECTORS value coma separated
+  // and add .hovered class to your CSS right with your :hover selectors like
+  //
+  // button:hover,
+  // button.hovered
+  //
+  // if you don't want touchstart to trigger :hover you should add :not(body.touched *) selector to your :hover selectors like
+  //
+  // button:hover:not(body.touched *)
+  // button.hovered
+  //
+  // or use it as you like
   const touchHoverControl = function () {
     let hoveredElement;
     let moveDelayTimer;
